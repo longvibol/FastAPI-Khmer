@@ -1,0 +1,145 @@
+1- Rout មានន័យថា ផ្លូវវាទៅណា 
+
+@app.get("/home")
+def home():
+    return {"message": "Hello FastAPI!"}
+
+or 
+
+@app.get("/products")
+def get_products(limit: int = 2, skip: int = 2):
+    return {"limit": limit, "skip": skip}
+
+
+2- Path Parameters : {username} យើងបញ្ចួនទិន្នន័យ ឬ តម្លៃទៅអោយ API តាមរយៈខ្សែផ្លូវនៃ URL ផ្ទាល់តែម្តង់
+
+==> Return specific resource 
+@app.get("/user/{username}")
+def user(username: str):
+    return {"username": username}
+
+
+មានន័យថា យើងបញ្ជុន​ តម្លៃ ឈ្មោះតាម username ហើយវាប្រែប្រួលទៅតាម user នីមួយៗ
+
+Example in java: use @PathVariable
+
+@GetMapping("/users/{id}")
+public User getUser(@PathVariable Long id) {
+    return userService.findById(id);
+}
+
+3- Multiple Path Parameters
+
+@app.get("/user/{username}/id/{id}")
+def user_id(username: str, id: int):
+    return {"username": username,
+            "id": id}
+
+
+4- Query Parameter ប្រើសម្រាប់ filtering, searching, sorting, or pagination
+
+@app.get("/items/")
+def items(limit: int = 10):
+    return {"limit": limit}
+
+==> the url become : http://127.0.0.1:8000/items/?limit=10
+
+យើងចង់កំណត់ ចំនួន default value is 10 from parameter keywork : limit 
+
+- if we use url : GET: http://127.0.0.1:8000/items
+
+==> it will return limit = 10 by default 
+
+{
+    "limit": 10
+}
+
+
+---------------
+
+but if we use GET: http://127.0.0.1:8000/items/?limit=4 that have ? 
+
+the result will be ==> 
+
+
+{
+    "limit": 4
+}
+
+
+នៅក្នុង FastAPI វាអូតូ យើងគ្រាន់តែ declear parameter then it will no this is the query parameter 
+
+@app.get("/items/") យើងដាក់តែ items ទទេនោះទេ ចឹងវាស្គាល់ហើយ
+
+Example 2: 
+
+@app.get("/items1/")
+def items(limit: int = 10, id: int = 1):
+    return {"limit": limit, "id": id}
+
+GET: http://127.0.0.1:8000/items1
+
+Return ==> 
+
+
+{
+    "limit": 10,
+    "id": 1
+}
+
+
+with query url look like:
+
+
+http://127.0.0.1:8000/items1/?limit=10&id=1
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -4,10 +4,23 @@ from pydantic import BaseModel
 app = FastAPI()
 
 class Product(BaseModel):
-    name: str
-    price: float
-    stock: int
+    name: str = "Apple"
+    price: float = 10.5
+    stock: int = 10
 
-@app.post("/products/")
-def create_product(product: Product):
-    return product
+@app.post("/items/")
+def create_items(
+        item: Product,
+        discount: float = 0,
+        buy_Qty: int = 0
+):
+    final_price = (item.price -discount) * item.stock
+    Remain_Stock = item.stock - buy_Qty
+
+    return {
+        "item_name": item.name,
+        "original_price": item.price,
+        "discount_applied": discount,
+        "final_price": final_price,
+        "stock": Remain_Stock
+    }

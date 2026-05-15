@@ -10,7 +10,11 @@ class User(BaseModel):
 
 @app.post("/users/")
 def create_user(user: User):
-    return {"username": user.username,
+    return {
+        "status" : "success",
+        "data" : {
+            "username": user.username,
             "age": user.age,
             "gmail": user.gmail
+        }
             }

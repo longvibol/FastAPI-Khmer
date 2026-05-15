@@ -1,0 +1,91 @@
+from fastapi import FastAPI, Form
+from fastapi.responses import HTMLResponse
+
+app = FastAPI()
+
+
+@app.get("/", response_class=HTMLResponse)
+def login_form():
+    return """
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Login Form</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                background: #f4f4f4;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+            }
+
+            .login-box {
+                background: white;
+                padding: 30px;
+                border-radius: 10px;
+                box-shadow: 0 0 10px rgba(0,0,0,0.1);
+                width: 300px;
+            }
+
+            h2 {
+                text-align: center;
+            }
+
+            input {
+                width: 100%;
+                padding: 10px;
+                margin: 10px 0;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+            }
+
+            button {
+                width: 100%;
+                padding: 10px;
+                background: #007bff;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+            }
+
+            button:hover {
+                background: #0056b3;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="login-box">
+            <h2>Login</h2>
+
+            <form action="/login" method="post">
+                <input type="text" name="username" placeholder="Enter username" required>
+                <input type="password" name="password" placeholder="Enter password" required>
+                <button type="submit">Login</button>
+            </form>
+        </div>
+    </body>
+    </html>
+    """
+
+
+@app.post("/login")
+def login(
+    username: str = Form(...),
+    password: str = Form(...)
+):
+    if username == "" or password == "":
+        return {
+            "success": False,
+            "message": "Username and password are required"
+        }
+
+    return {
+        "success": True,
+        "message": "Login form submitted successfully",
+        "username": username
+    }
+
+

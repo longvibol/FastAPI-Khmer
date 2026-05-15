@@ -1,0 +1,6 @@
+1- query :want default ex. pagenation 
+
+#query
+@app.get("/items/")
+def items(limit: int = 10, user_id:int = 2):
+    return {"limit": limit, "user_id": user_id }

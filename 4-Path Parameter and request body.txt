@@ -1,0 +1,98 @@
+ដើម្បីធ្វើការកែប្រែទិន្នន័យ នៅក្នុង Data យើងត្រូវការ ពីរយ៉ាង
+
+1- which data you want to change (user_id) : path variable 
+2- Update body 
+
+@app.put("/users/{id}")
+def update_user(id: int, user: User):
+    return {"id": id, "username": user.username, "age": user.age}
+
+
+==> input id = 1
+
+{
+  "username": "vibol",
+  "age": 35,
+  "gmail": ""
+}
+
+
+-----------------------
+
+1- update body 
+
+
+from fastapi import FastAPI
+from pydantic import BaseModel
+
+app = FastAPI()
+
+class Product(BaseModel):
+    name: str = "Apple"
+    price: float = 10.5
+    stock: int = 10
+
+@app.post("/items/")
+def create_items(
+        item: Product,
+        discount: float = 0,
+        buy_Qty: int = 0
+):
+    final_price = (item.price -discount) * item.stock
+    Remain_Stock = item.stock - buy_Qty
+
+    return {
+        "item_name": item.name,
+        "original_price": item.price,
+        "discount_applied": discount,
+        "final_price": final_price,
+        "stock": Remain_Stock
+    }
+
+---------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

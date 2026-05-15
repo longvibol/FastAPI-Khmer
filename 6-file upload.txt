@@ -1,0 +1,106 @@
++ Why use File Upload : ប្រើដើម្បីដាក់ទិន្នន័យចូល Server faster and it save memory 
+
+- វាជួយ Server កុំអោយគាំងពេល file ធំ
+
+Example : 
+
+-------------------
+
+
+from fastapi import FastAPI, UploadFile, File
+
+app = FastAPI()
+
+@app.post("/upload")
+async def upload(file: UploadFile = File(...)):
+    return {
+        "filename": file.filename,
+        "content_type": file.content_type
+    }
+
+----
+
+Explain : File(...) គេដាក់ចឹងដោយសារតែ គេមិនទាន់ដឹងថា ការ upload នឹងវា ជា file អ្វីនោះទេ
+==> The ... means required ត្រូវតែមាន
+
+-----------------
+
+Similar to java 
+
+
+@PostMapping("/upload")
+public Map<String, Object> upload(@RequestParam("file") MultipartFile file) {
+    return Map.of(
+        "filename", file.getOriginalFilename(),
+        "content_type", file.getContentType(),
+        "file_size", file.getSize()
+    );
+}
+
+
+--------------------------
+
+FastAPI vs Java 
+
+- file: UploadFile = File(...)
+
+file            = parameter name
+UploadFile      = type of data, uploaded file
+File(...)       = get it from form-data file upload
+...             = required
+
+
+----------------------------
+
+- @RequestParam("file") MultipartFile file
+
+file              = parameter name
+MultipartFile     = type of data, uploaded file
+@RequestParam     = get it from request/form-data
+required=true     = required
+
+
+@RestController
+public class UploadController {
+
+    @PostMapping("/upload")
+    public Map<String, Object> upload(
+            @RequestParam("file") MultipartFile file
+    ) {
+        return Map.of(
+                "filename", file.getOriginalFilename(),
+                "content_type", file.getContentType()
+        );
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

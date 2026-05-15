@@ -1,0 +1,221 @@
+1- pydantic : validation from Python 
+
+from pydantic import BaseModel
+
+ប្រើសម្រាប់ដាក់ Validation សម្រាប់ Class and object 
+
+- automatic validation 
+
+- Create class User :
+
+class User(BaseModel):
+    username: str
+    age: int
+    gmail: str
+
+We think as BaseModel is the parent class that User extends 
+
+Ex:
+
+-------------------------------------
+
+from fastapi import FastAPI
+from pydantic import BaseModel
+
+app = FastAPI()
+
+class User(BaseModel):
+    username: str
+    age: int
+    gmail: str
+
+@app.post("/users/")
+def create_user(user: User):
+    return {
+        "status" : "success",
+        "data" : {
+            "username": user.username,
+            "age": user.age,
+            "gmail": user.gmail
+        }
+            }
+
+--------------------------------------
+
+Run : python -m uvicorn dynamic:app --reload
+
+{
+  "username": "vibol",
+  "age": 10,
+  "gmail": "vibollong@gmail.com"
+}
+
+
+2- We use field to add more validation 
+
+--Example with return body : 
+
+
+from fastapi import FastAPI
+from pydantic import BaseModel, Field
+
+app = FastAPI()
+
+class User(BaseModel):
+    username: str = Field(min_length=3, max_length=20)
+    age: int = Field(gt=0, lt=120)
+    gmail: str = Field(pattern=r"^[\w\.-]+@gmail\.com$")
+
+@app.post("/users/")
+def create_user(user: User):
+    return {
+        "status": "success",
+        "data": user
+    }
+
+
+-------------------------------------
+
+Or we can return the whole object : 
+
+
+from fastapi import FastAPI
+from pydantic import BaseModel, Field
+
+app = FastAPI()
+
+class User(BaseModel):
+    username: str = Field(min_length=3, max_length=20)
+    age: int = Field(gt=0, lt=120)
+    gmail: str = Field(pattern=r"^[\w\.-]+@gmail\.com$")
+
+@app.post("/users/")
+def create_user(user: User):
+    return user
+
+4- Optional Fields : Optional
+
+
+from fastapi import FastAPI
+from pydantic import BaseModel
+from typing import Optional
+
+app = FastAPI()
+
+class User(BaseModel):
+    username: str
+    age: int
+    gmail: Optional[str] = None
+
+@app.post("/users/")
+def create_user(user: User):
+    if user.gmail:
+        return {"Gmail": user.gmail}
+    else:
+        return {"No Email: ": "No Email !"}
+
+
+Testing : 
+
+POST : http://127.0.0.1:8000/users/
+
+{
+  "username": "vibol",
+  "age": 35,
+  "gmail": ""
+}
+
+==>
+
+{
+  "No Email: ": "No Email !"
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

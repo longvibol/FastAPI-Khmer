@@ -1,0 +1,19 @@
+1- run project 
+
+>> python -m uvicorn main:app --reload
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

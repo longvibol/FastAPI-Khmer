@@ -1,0 +1,21 @@
+- Ecommerce -Clothes
+
+Feature:
+
+1. User : Login/Register
+-Full name, Gender, Phone number, Email, Password, Confirm Password 
+
+2. Product:
+
+-Title Product, Original price, Discount Price, Category Product, select color, multiple size select,
+Description, main image from local computer, sub image multiple from local computer.
+
+3. Category product:
+
+-ID, pee category
+
+4. Order Detail:
+
+5. Backup Data: file.db
+
+6. Telegram bot alert

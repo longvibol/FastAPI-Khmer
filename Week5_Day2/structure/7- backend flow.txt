@@ -1,0 +1,22 @@
+User Register/Login
+        ↓
+User selects product
+        ↓
+User creates order
+        ↓
+Backend creates transaction_id
+        ↓
+Backend creates KHQR checkout URL
+        ↓
+Frontend redirects user to KHQR payment page
+        ↓
+User pays with Cambodian bank app
+        ↓
+KHQR redirects to success_url
+        ↓
+Backend verifies transaction
+        ↓
+If paid:
+   - update order payment_status = PAID
+   - save payment record
+   - send Telegram alert

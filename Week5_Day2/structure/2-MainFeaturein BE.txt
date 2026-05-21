@@ -1,0 +1,46 @@
+1. User Login / Register
+   - Full name
+   - Gender
+   - Phone number
+   - Email
+   - Password
+   - Confirm password
+
+2. Product Management
+   - Product title
+   - Original price
+   - Discount price
+   - Category
+   - Multiple colors
+   - Multiple sizes
+   - Description
+   - Main image upload
+   - Multiple sub image upload
+
+3. Category Product
+   - ID
+   - Parent category / pee category
+   - Category name
+
+4. Order Detail
+   - Customer
+   - Product items
+   - Size
+   - Color
+   - Quantity
+   - Total amount
+   - Payment status
+
+5. Backup Data
+   - SQLite database file: file.db
+   - Download backup API
+
+6. Telegram Bot Alert
+   - Alert when new order is created
+   - Alert when payment is successful
+
+7. KHQR Payment
+   - Generate checkout URL
+   - Redirect user to KHQR payment page
+   - Verify transaction after payment
+   - Update order status to PAID

@@ -1,0 +1,23 @@
+Recommended Order Status
+
+PENDING
+PROCESSING
+PAID
+SHIPPED
+COMPLETED
+CANCELLED
+FAILED
+
+
+Recommended Payment Status
+
+
+UNPAID
+PENDING
+PAID
+FAILED
+REFUNDED
+
+
+
+

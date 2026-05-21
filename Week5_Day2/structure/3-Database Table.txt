@@ -1,0 +1,115 @@
+users
+│
+├── id
+├── full_name
+├── gender
+├── phone_number
+├── email
+├── hashed_password
+├── role
+├── is_active
+└── created_at
+
+
+categories
+│
+├── id
+├── name
+├── parent_id
+└── created_at
+
+
+products
+│
+├── id
+├── title
+├── original_price
+├── discount_price
+├── category_id
+├── colors
+├── sizes
+├── description
+├── main_image
+├── is_active
+└── created_at
+
+
+
+product_images
+│
+├── id
+├── product_id
+├── image_url
+└── created_at
+
+
+orders
+│
+├── id
+├── transaction_id
+├── user_id
+├── total_amount
+├── status
+├── payment_method
+├── payment_status
+└── created_at
+
+
+
+order_items
+│
+├── id
+├── order_id
+├── product_id
+├── product_title
+├── size
+├── color
+├── quantity
+├── price
+└── subtotal
+
+
+payments
+│
+├── id
+├── order_id
+├── transaction_id
+├── amount
+├── status
+├── gateway_response
+├── payment_date
+└── created_at
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

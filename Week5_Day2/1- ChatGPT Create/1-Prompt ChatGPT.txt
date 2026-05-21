@@ -1,0 +1,211 @@
+- Ecommerce -Clothes
+
+Feature:
+
+1. User : Login/Register
+-Full name, Gender, Phone number, Email, Password, Confirm Password 
+
+2. Product:
+
+-Title Product, Original price, Discount Price, Category Product, select color, multiple size select,
+Description, main image from local computer, sub image multiple from local computer.
+
+3. Category product:
+
+-ID, pee category
+
+4. Order Detail:
+
+5. Backup Data: file.db
+
+Gateway
+QR Checkout
+QR Payment Page
+Generate secure, mobile-optimized checkout sessions for your customers using any Cambodian bank app.
+
+DIRECT API
+v1.1.0
+Dynamic Checkout Sessions
+KHQRPay provides a managed checkout environment. Redirect your customers to the following endpoint with signed parameters to initiate a payment flow.
+
+Endpoint
+GET
+https://khqr.cc/api/payment/request/aEaG4uiBgUg0s69AaCxGbDoldlG7OZyz
+content_copy
+Request Parameters
+Key	Type	Required	Notes
+transaction_id	string	YES	Your internal unique Order ID.
+amount	decimal	YES	USD amount (Min: 0.01).
+success_url	url	YES	Callback destination.
+hash	sha1	YES	
+sha1(secret + id + amt + url + remark)
+Implementation (PHP)
+checkout.php
+Copy
+
+// 1. CONFIGURATION
+$gateway_url = "https://khqr.cc/api/payment/request";
+$profile_id  = "aEaG4uiBgUg0s69AaCxGbDoldlG7OZyz";
+$secret_key  = "YOUR_SECRET_KEY";
+
+// 2. TRANSACTION DETAILS
+$payment_data = [
+    "transaction_id" => "ORD_" . time(),
+    "amount"         => 12.50,
+    "success_url"    => "https://site.com/done",
+    "remark"         => "Web Order #88"
+];
+
+// 3. SECURITY (HASHING)
+$raw_string = $secret_key 
+            . $payment_data['transaction_id'] 
+            . $payment_data['amount'] 
+            . $payment_data['success_url'] 
+            . $payment_data['remark'];
+
+$payment_data['hash'] = sha1($raw_string);
+
+// 4. REDIRECT
+$final_url = $gateway_url . "/" . $profile_id . "?" . http_build_query($payment_data);
+
+header("Location: " . $final_url);
+exit;
+
+Verify Transaction API
+Ensuring payment integrity through server-side verification.
+
+API Verification
+After receiving a success callback or when the user is redirected back to your site, you should always verify the transaction status using this API endpoint.
+
+POST
+https://khqr.cc/api/aEaG4uiBgUg0s69AaCxGbDoldlG7OZyz/payment-gateway/v1/payments/check-trans
+Post Fields
+Field	Description
+transaction_id	The unique ID sent during the initial request.
+hash	sha1($profile_key . $transaction_id)
+PHP Verification Example
+verify_transaction.php
+<?php
+
+$verify_url = "https://khqr.cc/api/aEaG4uiBgUg0s69AaCxGbDoldlG7OZyz/payment-gateway/v1/payments/check-trans";
+$profile_key = "YOUR_PROFILE_KEY";
+$transaction_id = "ORD_12345";
+
+// Security Hash
+$hash = sha1($profile_key . $transaction_id);
+
+$postData = [
+    'transaction_id' => $transaction_id,
+    'hash' => $hash
+];
+
+// Send POST Request
+$ch = curl_init($verify_url);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_POST, true);
+curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
+$response = curl_exec($ch);
+curl_close($ch);
+
+$result = json_decode($response, true);
+
+// ✅ Real success condition
+$isPaid = (
+    isset($result['responseCode']) &&
+    (int)$result['responseCode'] === 0 &&
+    isset($result['data']['status']) &&
+    strtolower($result['data']['status']) === 'success'
+);
+
+if ($isPaid) {
+    echo "Transaction Verified! Amount: " . ($result['data']['amount'] ?? 'N/A');
+} else {
+    echo "Verification Failed";
+}
+
+?>
+qr_code
+Sample JSON Response (Standard KHQR)
+{
+  "responseCode": 0,
+  "responseMessage": "Success",
+  "data": {
+    "transaction_id": "1769526531",
+    "status": "success",
+    "amount": "0.01",
+    "currency": "USD",
+    "payment_date": "2026-01-27T15:08:53+00:00",
+    "payment_details": {
+      "amount": "0.01",
+      "currency": "USD",
+      "sender": "praskhppxxx@pras",
+      "date": "Jan 27, 2026, 15:09:04",
+      "externalRef": "MB26000071744187",
+      "bakonghash": "4e284f1f",
+      "username": "Gateway User",
+      "fullMsg": "..."
+    },
+    "redirect_url": "https://merchant.com/success?..."
+  }
+}
+qr_code_2
+Sample JSON Response (ABA Pay / KHQRcc)
+{
+  "responseCode": 0,
+  "responseMessage": "Success",
+  "data": {
+    "transaction_id": "TESTQR_1775355429609",
+    "status": "success",
+    "amount": "0.01",
+    "currency": "USD",
+    "payment_date": "2026-04-05T09:17:15+07:00",
+    "payment_details": {
+      "amount": "0.01",
+      "currency": "USD",
+      "sender": "1877223-367503-202170802",
+      "date": "Apr 05, 2026, 09:17:45",
+      "externalRef": "177535543566963",
+      "bakonghash": "N/A",
+      "username": "API User",
+      "fullMsg": "You received 0.01 USD from 1877223-367503-202170802 on Apr 05, 2026, 09:17:45 by Transaction ID: 177535543566963, Bakong Hash: N/A. Remark: API Test"
+    },
+    "redirect_url": "https://merchant.com/success?success_time=...&success_hash=..."
+  }
+}
+currency_bitcoin
+Sample JSON Response (Binance Pay)
+{
+  "responseCode": 0,
+  "responseMessage": "Success",
+  "data": {
+    "transaction_id": "BNB_1769526544",
+    "status": "success",
+    "amount": "10.00",
+    "currency": "USD",
+    "payment_date": "2026-03-09T14:15:22+00:00",
+    "payment_details": {
+      "amount": "10.00",
+      "currency": "USDT",
+      "sender": "John Doe",
+      "date": "Mar 09, 2026, 14:15:30",
+      "binance_order_id": "9812931298412",
+      "username": "N/A",
+      "fullMsg": "You received 10.00 USDT via Binance Pay from John Doe..."
+    },
+    "redirect_url": "https://merchant.com/success?..."
+  }
+}
+Sample JSON Response (Not Found / Pending)
+{
+  "responseCode": 1,
+  "responseMessage": "Transaction Not Found"
+}
+
+product user can pay with KHQR payment.
+Backend: FastAPI + SQLite
+Frontend_user: Reactjs(npx create-react-app frontend_user) + Tailwindcss(CDN link)
+Frontend_Admin: Reactjs(npx create-react-app frontend_admin) + Tailwindcss(CDN link)
+
+please give me only Backend Structure full to me please
+
+6. Telegram bot alert

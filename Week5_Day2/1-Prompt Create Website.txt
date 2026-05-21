@@ -1,0 +1,56 @@
+1- We create structure first 
+
+product user can pay with KHQR payment. 
+
+Backend: FastAPI + SQLite Frontend_user: 
+
+Reactjs(npx create-react-app frontend_user) + Tailwindcss(CDN link) 
+
+Frontend_Admin: Reactjs(npx create-react-app frontend_admin) + Tailwindcss(CDN link) 
+
+
+>> please give me only Backend Structure full to me please.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
